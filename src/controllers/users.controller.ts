@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { CreateUserDto } from '@dtos/users.dto';
 import { User } from '@interfaces/users.interface';
 import userService from '@services/users.service';
+import { redisRepository } from 'repositories/redis.repository';
 
 class UsersController {
   public userService = new userService();
@@ -18,10 +19,9 @@ class UsersController {
 
   public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userId = Number(req.params.id);
-      const findOneUserData: User = await this.userService.findUserById(userId);
-
-      res.status(200).json({ data: findOneUserData, message: 'findOne' });
+      const cityId = req.params.id;
+      let c = await redisRepository.removeCitiesByIdAsync(cityId);
+      res.status(200).json(c);
     } catch (error) {
       next(error);
     }
@@ -29,10 +29,11 @@ class UsersController {
 
   public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: CreateUserDto = req.body;
-      const createUserData: User = await this.userService.createUser(userData);
-
-      res.status(201).json({ data: createUserData, message: 'created' });
+      const cityId = req.body.cityId;
+      const cityName = req.body.cityName;
+      const city: City = { id: cityId, name: cityName };
+      await redisRepository.addCityAsync(city);
+      res.sendStatus(200);
     } catch (error) {
       next(error);
     }
