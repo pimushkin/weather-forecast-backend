@@ -3,7 +3,7 @@ import { IWeatherApiResponse } from '@interfaces/weatherApiResponse.interface';
 import { WeatherByCityNameRequestDto } from '@dtos/weatherByCityNameRequest.dto';
 import { WeatherByIdRequestDto } from '@dtos/weatherByIdRequest.dto';
 import { WeatherByCoordinatesRequestDto } from '@dtos/weatherByCoordinatesRequest.dto';
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 
 class WeatherService {
     private weatherApiUrl = `${process.env.BASE_WEATHER_API_URL}weather?units=metric&appid=${process.env.WEATHER_API_KEY}&`;
