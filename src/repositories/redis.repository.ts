@@ -1,11 +1,7 @@
 import Redis from 'ioredis';
 
 class RedisRepository {
-    private redis: Redis;
-    constructor()
-    {
-        this.redis = new Redis(process.env.REDIS_URL);
-    }
+    private redis = new Redis(process.env.REDIS_URL);
 
     private async getCityNamesAsync(): Promise<string[]> {
         return new Promise((resolve, reject) => {
