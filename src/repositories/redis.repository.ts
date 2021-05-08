@@ -40,26 +40,26 @@ class RedisRepository {
         return Promise.all(promises);
     }
 
-    // async getCityIdsAsync(): Promise<string[]> {
-    //     let cityNames = await this.getCityNamesAsync();
-    //     if (!cityNames?.length) {
-    //         return [];
-    //     }
-    //     let cityIDs: string[] = [];
-    //     let promises = cityNames.map(cityName => new Promise<string>(resolve => {
-    //         this.redis.get(cityName, (err, cityId) => {
-    //             resolve(cityId);
-    //         });
-    //     }));
-    //     return new Promise((resolve) => {
-    //         Promise.all(promises).then(results => {
-    //             results.forEach((city: string) => {
-    //                 cityIDs.push(city);
-    //             });
-    //             resolve(cityIDs);
-    //         });
-    //     });
-    // }
+    async getCityIdsAsync(): Promise<string[]> {
+        let cityNames = await this.getCityNamesAsync();
+        if (!cityNames?.length) {
+            return [];
+        }
+        let cityIDs: string[] = [];
+        let promises = cityNames.map(cityName => new Promise<string>(resolve => {
+            this.redis.get(cityName, (err, cityId) => {
+                resolve(cityId);
+            });
+        }));
+        return new Promise((resolve) => {
+            Promise.all(promises).then(results => {
+                results.forEach((city: string) => {
+                    cityIDs.push(city);
+                });
+                resolve(cityIDs);
+            });
+        });
+    }
 
     async removeCitiesByIdAsync(cityId : string) : Promise<void> {
         const cities = await this.getCitiesAsync();
@@ -75,17 +75,6 @@ class RedisRepository {
     async addCityAsync(cityName: string, cityId: string): Promise<void> {
         this.redis.set(cityName, cityId);
     };
-
-    async isCityExistsAsync(cityName: string, cityId: string): Promise<boolean> {
-        var existingCities = await this.getCitiesAsync();
-        if (!existingCities) existingCities = [];
-        if (existingCities.filter(function (existingCity: City) {
-            return existingCity.name === cityName && existingCity.id === cityId;
-        }).length > 0) {
-            return true;
-        };
-        return false;
-    }
 
     async isCityNameExistsAsync(cityName: string): Promise<boolean> {
         var existingCities = await this.getCitiesAsync();
@@ -104,9 +93,9 @@ class RedisRepository {
         if (existingCities.filter(function (existingCity: City) {
             return existingCity.id === cityId;
         }).length > 0) {
-            return false;
+            return true;
         };
-        return true;
+        return false;
     }
 }
 

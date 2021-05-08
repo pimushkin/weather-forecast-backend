@@ -1,6 +1,6 @@
 export interface IWeatherApiResponse {
     wind: { speed: number },
-    city: { weather: IWeather[] },
+    weather: IWeather[],
     main: { pressure: number, humidity: number, temp: number },
     coord: { lon: number, lat: number },
     name: string,
