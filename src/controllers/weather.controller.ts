@@ -10,7 +10,7 @@ class WeatherController {
 
     public getWeatherByCityName = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const request: WeatherByCityNameRequestDto = req.query as unknown as WeatherByCityNameRequestDto;
+            const request: WeatherByCityNameRequestDto = req.body as unknown as WeatherByCityNameRequestDto;
             const result: IWeatherApiResponse = await this.weatherService.getWeatherJsonByCityNameAsync(request);
 
             res.status(200).json(result);

@@ -16,10 +16,10 @@ class WeatherRoute implements Route {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/city-by-name`, validationMiddleware(WeatherByCityNameRequestDto, 'query'), this.weatherController.getWeatherByCityName);
+        this.router.post(`${this.path}/city`, validationMiddleware(WeatherByCityNameRequestDto, 'body'), this.weatherController.getWeatherByCityName);
         this.router.get(`${this.path}/coordinates`, validationMiddleware(WeatherByCoordinatesRequestDto, 'query'), this.weatherController.getWeatherByCoordinates);
         this.router.get(`${this.path}/all`, this.weatherController.getWeatherForEachCity);
-        this.router.get(`${this.path}/default`, this.weatherController.getDefaultWeather);
+        this.router.get(`${this.path}`, this.weatherController.getDefaultWeather);
         this.router.delete(`${this.path}`, validationMiddleware(DeleteCityRequestDto, 'body'), this.weatherController.deleteCity);
     }
 }
